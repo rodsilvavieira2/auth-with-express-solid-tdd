@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_USER=docker
+      - POSTGRES_DB=docker
+  api:
+    image: node:16
+    restart: always
+    working_dir: /usr/app
+    command: bash -c 'npx prisma migrate dev && npm run dev'
+    env_file:
+      - .env
+      - .env.test
+    ports:
+      - 8080:8080
+      - 9229:9229
+    volumes:
+      - .:/usr/app/
+    links:
+      - postgres
+    depends_on:
+      - postgres

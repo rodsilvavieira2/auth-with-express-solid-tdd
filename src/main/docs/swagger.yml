@@ -1,0 +1,338 @@
+openapi: 3.0.0
+
+info:
+  title: test-api backend
+  description: docs para uma api de autenticação de usuários
+  version: 1.1.1
+  contact:
+    name: Rodrigo Silva
+    email: rodsilvaviera@gmail.com
+
+servers:
+  - url: /api
+  
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        avatar:
+          type: string
+          format: url
+        createAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Tokens:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        token:
+          type: string
+          format: jwt
+        expiresIn:
+          type: string
+          format: date-time
+        userId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+paths:
+  /signup:
+    post:
+      tags:
+        - "Autenticação"
+      summary: Cria um novo usuário e inicia uma nova sessão
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+
+      responses:
+        "201":
+          description: Foi criado um novo usuário corretamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+                  tokens:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                        format: uuid
+                      refreshToken:
+                        type: string
+                        format: uuid
+        "400":
+          description: Erro ao criar um novo usuário , um campo pode estar faltando ou é invalido.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /login:
+    post:
+      tags:
+        - "Autenticação"
+      summary: Cria uma nova sessão
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        "200":
+          description: A nova sessão foi criada corretamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+                  tokens:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                        format: uuid
+                      refreshToken:
+                        type: string
+                        format: uuid
+        "401":
+          description: Email ou senha invalidos.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /refresh-token:
+    post:
+      summary: Cria novos tokens acesso a partir de um refresh token valido.
+      tags:
+        - "Autenticação"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+
+      responses:
+        "200":
+          description: Os novos tokens foram criados corretamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                      refreshToken:
+                        type: string
+        "401":
+          description: Foi enviado um refreshToken invalido.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+        "404":
+          description: O refreshToken enviado não existe.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: O refreshToken token não foi encontrado nos header da requisição
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /users/{userId}:
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - "Usuário"
+      summary: Delete um usuário existente.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID do usuário que será deletado.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: O usuário foi deletado corretamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: O usuário não foi encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: O usuário não tem permissão para deletar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+        - "Usuário"
+      summary: Atualize dos dados de usuário existente.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID do usuário que será atualizado.
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        "200":
+          description: O usuário foi atualizado corretamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Um campo pode estar faltando ou é invalido.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: O usuário não foi encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: O usuário não tem permissão para atualizar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - "Usuário"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID do usuário que será buscado.
+          schema:
+            type: string
+      summary: Busca um usuário existente.
+      responses:
+        "200":
+          description: O usuário foi encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/User"
+        "401":
+          description: O usuário não tem permissão para buscar
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: O usuário não foi encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    
