@@ -1,11 +1,15 @@
 {
-  "name": "api-tester-backend",
+  "name": "auh-with-express",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/main/server.ts",
   "license": "MIT",
+  "description": "Autenticação basica com emal e senha, utilizando JWT para controlar acesso, utilizando os principios do SOLID, TDD, DDD",
   "author": {
     "name": "Rodrigo Silva",
     "email": "rodsilvavieira@gmail.com"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   },
   "scripts": {
     "test": "jest --runInBand --no-cache --silent",
@@ -15,6 +19,15 @@
     "build": "npx rimraf dist && babel src --extensions \".js,.ts,\" --out-dir dist && node copy-docs-files.js",
     "start": "node dist/main/server.js --inspect"
   },
+  "keywords": [
+    "node",
+    "SOLID",
+    "TDD",
+    "DDD",
+    "jest",
+    "authentication",
+    "typescript"
+  ],
   "dependencies": {
     "@prisma/client": "^3.12.0",
     "bcrypt": "^5.0.1",
