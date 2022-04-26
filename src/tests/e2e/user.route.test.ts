@@ -3,10 +3,9 @@ import request from "supertest";
 
 import faker from "@faker-js/faker";
 import { prismaClient } from "@src/infra/db/postgres";
+import { setUpApp } from "@src/main/config/app";
+import { JWT_CONFIG } from "@src/main/config/env";
 import { createUserMock } from "@src/mocks/models";
-
-import { setUpApp } from "../config/app";
-import { JWT_CONFIG } from "../config/env";
 
 describe("Users Routes", () => {
   let app: request.SuperTest<request.Test>;

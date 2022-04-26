@@ -17,5 +17,5 @@ module.exports = {
     ["@babel/plugin-proposal-decorators", { legacy: true }],
     ["@babel/plugin-proposal-class-properties", { loose: true }],
   ],
-  ignore: ["**/*.test.ts", "**/*.spec.ts", "src/mocks", "src/@types/**"],
+  ignore: ["**/*.test.ts", "**/*.spec.ts", "src/mocks", "src/@types/**", "src/tests"],
 };

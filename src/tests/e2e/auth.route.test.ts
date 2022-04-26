@@ -5,7 +5,7 @@ import faker from "@faker-js/faker";
 import { prismaClient } from "@src/infra/db/postgres";
 import { createUserMock } from "@src/mocks/models";
 
-import { setUpApp } from "../config/app";
+import { setUpApp } from "../../main/config/app";
 
 describe("Auth Routes", () => {
   let app: request.SuperTest<request.Test>;

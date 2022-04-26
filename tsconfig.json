@@ -26,7 +26,7 @@
   },
   "include": [
     "src"
-  ],
+, "tests/e2e/auth.route.test.ts"  ],
   "exclude": [
     "node_modules/**"
   ]
