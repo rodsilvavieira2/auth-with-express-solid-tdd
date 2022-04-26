@@ -16,7 +16,7 @@ export class DeleteUserByIdService implements IDeleteUserById {
   async deleteById({
     userId,
   }: UserUseCasePrams["deleteById"]): Promise<void | AppError> {
-    const user = this.usersRepository.findById({
+    const user = await this.usersRepository.findById({
       userId,
     });
 

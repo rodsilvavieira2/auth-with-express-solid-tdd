@@ -30,6 +30,10 @@ describe("DeleteUserByIdService", () => {
 
     const result = await sut.deleteById(params);
 
+    expect(usersRepositorySpy.findByIdParams).toEqual({
+      userId: params.userId,
+    });
+
     expect(usersRepositorySpy.deleteByIdParams).toEqual({
       userId: params.userId,
     });
@@ -40,7 +44,7 @@ describe("DeleteUserByIdService", () => {
   it("should delete an AppError if not find the user ", async () => {
     const { sut, usersRepositorySpy } = makeSut();
 
-    jest.spyOn(usersRepositorySpy, "deleteById").mockResolvedValue(false);
+    usersRepositorySpy.findByIdReturn = null;
 
     const result = await sut.deleteById(params);
 

@@ -35,6 +35,10 @@ describe("UpdateUserService", () => {
 
     const result = await sut.update(params);
 
+    expect(usersRepositorySpy.findByIdParams).toEqual({
+      userId: params.userId,
+    });
+
     expect(usersRepositorySpy.updateParams).toEqual({
       userId: params.userId,
       data: params.data,
@@ -48,7 +52,7 @@ describe("UpdateUserService", () => {
   it("should return an AppError if not find the user", async () => {
     const { sut, usersRepositorySpy } = makeSut();
 
-    usersRepositorySpy.updateReturn = null;
+    usersRepositorySpy.findByIdReturn = null;
 
     const result = await sut.update(params);
 
