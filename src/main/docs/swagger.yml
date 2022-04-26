@@ -7,6 +7,7 @@ info:
   contact:
     name: Rodrigo Silva
     email: rodsilvaviera@gmail.com
+    url: https://github.com/rodsilvavieira2
 
 servers:
   - url: /api
