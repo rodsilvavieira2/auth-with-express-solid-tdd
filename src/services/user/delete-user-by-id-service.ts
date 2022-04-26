@@ -16,13 +16,17 @@ export class DeleteUserByIdService implements IDeleteUserById {
   async deleteById({
     userId,
   }: UserUseCasePrams["deleteById"]): Promise<void | AppError> {
-    const isDeleted = await this.usersRepository.deleteById({
+    const user = this.usersRepository.findById({
       userId,
     });
 
-    if (!isDeleted) {
+    if (!user) {
       return new UserNotFoundError();
     }
+
+    await this.usersRepository.deleteById({
+      userId,
+    });
 
     return undefined;
   }

@@ -26,31 +26,23 @@ export class UsersRepository implements IUserRepository {
   async deleteById({
     userId,
   }: UserUseCasePrams["deleteById"]): Promise<boolean> {
-    try {
-      await prismaClient.users.delete({
-        where: {
-          id: userId,
-        },
-      });
+    await prismaClient.users.delete({
+      where: {
+        id: userId,
+      },
+    });
 
-      return true;
-    } catch {
-      return false;
-    }
+    return true;
   }
 
   async update({ data, userId }: UserUseCasePrams["update"]): Promise<User> {
-    const { email, name, password } = data;
+    const { email, name, password, avatarUrl } = data;
 
-    try {
-      const result = await prismaClient.users.update({
-        where: { id: userId },
-        data: { email, name, password },
-      });
-      return result;
-    } catch {
-      return null;
-    }
+    const result = await prismaClient.users.update({
+      where: { id: userId },
+      data: { email, name, password, avatarUrl },
+    });
+    return result;
   }
 
   async findByEmail({

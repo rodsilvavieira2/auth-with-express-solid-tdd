@@ -22,14 +22,20 @@ export class UpdateUserService implements IUpdateUser {
   }: UserUseCasePrams["update"]): Promise<
     UserUseCaseReturns["base"] | AppError
   > {
-    const isUpdated = await this.usersRepository.update({
+    const user = await this.usersRepository.findById({
+      userId,
+    });
+
+    if (!user) {
+      return new UserNotFoundError();
+    }
+
+    const updatedData = await this.usersRepository.update({
       userId,
       data,
     });
 
-    if (!isUpdated) return new UserNotFoundError();
-
-    return removePasswordFiled(isUpdated);
+    return removePasswordFiled(updatedData);
   }
 }
 

@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  MaxLength,
   MinLength,
 } from "class-validator";
 
@@ -25,5 +26,6 @@ export class UpdateUserDTO {
 
   @IsUrl()
   @IsOptional()
+  @MaxLength(255)
   avatarUrl?: string;
 }

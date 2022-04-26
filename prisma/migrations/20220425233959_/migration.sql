@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "avatarUrl" SET DATA TYPE VARCHAR(255);
