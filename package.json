@@ -17,7 +17,7 @@
     "test:e2e": "npm test -- -c jest-e2e.config.ts",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect=0.0.0.0:9229 --transpile-only --ignore-watch node_modules --respawn --exit-child src/main/server.ts",
     "build": "npx rimraf dist && babel src --extensions \".js,.ts,\" --out-dir dist && node copy-docs-files.js",
-    "start": "npx prisma migrate deploy && node dist/main/server.js"
+    "start": "node dist/main/server.js"
   },
   "keywords": [
     "node",
